@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Ekonomi Kreatif')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -29,48 +29,51 @@
                             <a href="{{ route('admin.ekonomi-kreatif.create') }}" class="btn btn-primary">Tambah Data</a>
                         </div>
                         <div class="card-body">
-                            <table id="table1" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:2%">No</th>
-                                        <th style="width:10%">Thumbnail</th>
-                                        <th style="width:10%">Kategori</th>
-                                        <th style="width:10%">Produk</th>
-                                        <th style="width:10%">Harga</th>
-                                        <th style="width:10%">Lokasi</th>
-                                        <!-- <th style="width:18%">Keterangan</th> -->
-                                        <th style="width:10%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($ekonomi_kreatif as $i => $d)
+
+                            <div class="table-responsive">
+                                <table id="table1" class="table table-striped">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $i + 1 }}</td>
-                                            <td><img src="{{ $d->thumbnail_ekonomi_kreatif }}"
-                                                    alt="{{ $d->thumbnail_ekonomi_kreatif }}" class="img-fluid"
-                                                    width="100px"></td>
-                                            <td>{{ $d->kategori->nama_kategori_kreatif }}</td>
-                                            <td>{{ $d->nama_ekonomi_kreatif }}</td>
-                                            <td>{{ number_format($d->harga) }}</td>
-                                            <td>
-                                                <iframe width="300" height="170" frameborder="0" scrolling="no"
-                                                    marginheight="0" marginwidth="0"
-                                                    src="https://maps.google.com/maps?q=<?= $d->lat ?>,<?= $d->long ?>&hl=in&z=14&amp;output=embed"></iframe>
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('admin.ekonomi-kreatif.detail', $d->id) }}"
-                                                    style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i
-                                                        class="fas fa-eye"></i></a>
-                                                <a href="{{ route('admin.ekonomi-kreatif.edit', $d->id) }}"
-                                                    style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i
-                                                        class="fas fa-edit"></i></a>
-                                                <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px"
-                                                    class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
-                                            </td>
+                                            <th style="width:2%">No</th>
+                                            <th style="width:10%">Thumbnail</th>
+                                            <th style="width:10%">Kategori</th>
+                                            <th style="width:10%">Produk</th>
+                                            <th style="width:10%">Harga</th>
+                                            <th style="width:10%">Lokasi</th>
+                                            <!-- <th style="width:18%">Keterangan</th> -->
+                                            <th style="width:10%">Aksi</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($ekonomi_kreatif as $i => $d)
+                                            <tr>
+                                                <td>{{ $i + 1 }}</td>
+                                                <td><img src="{{ $d->thumbnail_ekonomi_kreatif }}"
+                                                        alt="{{ $d->thumbnail_ekonomi_kreatif }}" class="img-fluid"
+                                                        width="100px"></td>
+                                                <td>{{ $d->kategori->nama_kategori_kreatif }}</td>
+                                                <td>{{ $d->nama_ekonomi_kreatif }}</td>
+                                                <td>{{ number_format($d->harga) }}</td>
+                                                <td>
+                                                    <iframe width="300" height="170" frameborder="0" scrolling="no"
+                                                        marginheight="0" marginwidth="0"
+                                                        src="https://maps.google.com/maps?q=<?= $d->lat ?>,<?= $d->long ?>&hl=in&z=14&amp;output=embed"></iframe>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('admin.ekonomi-kreatif.detail', $d->id) }}"
+                                                        style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i
+                                                            class="fas fa-eye"></i></a>
+                                                    <a href="{{ route('admin.ekonomi-kreatif.edit', $d->id) }}"
+                                                        style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i
+                                                            class="fas fa-edit"></i></a>
+                                                    <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px"
+                                                        class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
 
                         </div>
                     </div>

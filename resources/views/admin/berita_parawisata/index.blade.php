@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Berita Parawisata')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -29,37 +29,39 @@
                             <a href="{{ route('admin.berita-parawisata.create') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
-                            <table id="table1" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:2%">No</th>
-                                        <th style="width:10%">Thumbnail</th>
-                                        <th style="width:10%">Judul</th>
-                                        <th style="width:10%">Sort Narasi</th>
-                                        <th style="width:10%">Posting By</th>
-                                        <th style="width:10%">Posted At</th>
-                                        <!-- <th style="width:18%">Keterangan</th> -->
-                                        <th style="width:10%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($berita as $i => $d)
-                                    <tr>
-                                        <td>{{$i+1}}</td>
-                                        <td><img src="{{ $d->foto }}" alt="{{ $d->judul }}" class="img-fluid" width="100px"></td>
-                                        <td>{{$d->judul}}</td>
-                                        <td>{{ substr(strip_tags($d->narasi), 0, 100) }}{{ strlen($d->narasi) > 100? "..." : "" }}</td>
-                                        <td>{{$d->posting_by}}</td>
-                                        <td>{{$d->created_at}}</td>
-                                        <td>
-                                        <a href="{{ route('admin.berita-pariwisata.detail', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('admin.berita-parawisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-                                            <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="table1" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:2%">No</th>
+                                            <th style="width:10%">Thumbnail</th>
+                                            <th style="width:10%">Judul</th>
+                                            <th style="width:10%">Sort Narasi</th>
+                                            <th style="width:10%">Posting By</th>
+                                            <th style="width:10%">Posted At</th>
+                                            <!-- <th style="width:18%">Keterangan</th> -->
+                                            <th style="width:10%">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($berita as $i => $d)
+                                        <tr>
+                                            <td>{{$i+1}}</td>
+                                            <td><img src="{{ $d->foto }}" alt="{{ $d->judul }}" class="img-fluid" width="100px"></td>
+                                            <td>{{$d->judul}}</td>
+                                            <td>{{ substr(strip_tags($d->narasi), 0, 100) }}{{ strlen($d->narasi) > 100? "..." : "" }}</td>
+                                            <td>{{$d->posting_by}}</td>
+                                            <td>{{$d->created_at}}</td>
+                                            <td>
+                                            <a href="{{ route('admin.berita-pariwisata.detail', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                                <a href="{{ route('admin.berita-parawisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                                                <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
 
                         </div>
                     </div>

@@ -11,6 +11,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>@yield('title', "AdminLTE 3")</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="shortcut icon" href="{{ url('/') }}/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="{{ url('/') }}/favicon.ico" type="image/x-icon">
+
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">

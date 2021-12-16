@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Berita Parawisata')
+@section('title', 'Edit Berita Parawisata')
 @push('css')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
@@ -68,7 +68,7 @@
                                             <label for="">Thumbnail</label>
 
                                             <div style="margin-top:30px" id="tampilFoto">
-                                                <img src="{{ storage_url($berita_parawisatum->foto) }}" width="60%"/>
+                                                <img src="{{ $berita_parawisatum->foto }}" width="60%"/>
                                             </div>
 
                                             <input type="file" name="thumbnail" id="thumbnail"

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Edit Akomodasi')
 @push('css')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
@@ -62,8 +62,6 @@
                                                     <label for="">Thumbnail</label>
                                                     <input type="file" name="thumbnail" id="thumbnail"
                                                         onchange="return tampilfoto()" class="form-control">
-                                                    <input type="hidden" id="lat" class="form-control" value="{{ $data->lat }}">
-                                                    <input type="hidden" id="lng" class="form-control" value="{{ $data->long }}">
                                                 </div>
                                             </div>
                                             <div class="col-md-12" id="form_kelas">
@@ -94,6 +92,16 @@
                                         <div class="form-group">
                                             <label for="">Lokasi</label>
                                             <div style="height: 337px;" id="map"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="">Latitude</label>
+                                                <input type="text" id="lat" name="lat" class="form-control" value="{{ $data->lat }}" onkeyup="showLocation()">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="">Longtitude</label>
+                                                <input type="text" id="lng" name="lng" class="form-control" value="{{ $data->long }}" onkeyup="showLocation()">
+                                            </div>
                                         </div>
                                     </div>
 
@@ -423,7 +431,7 @@
                 contentType: false,
                 dataType: 'JSON',
                 success: function(data) {
-                    // location.reload();
+                    location.reload();
                     alert("Fasilitas berhasil ditambahkan")
                     $('#tambah-fasilitas').modal('hide')
                     console.log(data);
@@ -498,22 +506,16 @@
         }
 
         function showLocation() {
-
-            // pas lokasi basobok, jalankan kode yg ado didalam function ko
-            var geolocation = navigator.geolocation.getCurrentPosition(function(pos) {
-                // kode dibawah ko dijalankan pas posisi gps basobok
-                var lat = pos.coords.latitude; // ambiak lat gps
-                var lng = pos.coords.longitude; // ambiak lng gps
+                lat = $('#lat').val()
+                lng = $('#lng').val();
                 map.addControl(controlSearch);
                 map.setView([lat, lng]); // ubah tampilan posisi peta ke posisi gps
                 marker.setLatLng([lat, lng]); // pindahkan posisi marker ke posisi gps
-            });
-
         }
+        showLocation()
 
         map.on('click', klik);
 
-        showLocation()
 
         function tampilfoto() {
             var fileInput = document.getElementById('thumbnail');

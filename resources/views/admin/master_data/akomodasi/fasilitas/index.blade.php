@@ -1,17 +1,17 @@
 @extends('admin.layouts.app')
-@section('title', 'Home')
+@section('title', 'Fasilitas Akomodasi')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Fasilitas</h1>
+                    <h1 class="m-0">Fasilitas Akomodasi</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Fasilitas</li>
+                        <li class="breadcrumb-item active">Fasilitas Akomodasi</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -124,16 +124,18 @@
                     contentType: false,
                     cache: false,
                     timeout: 800000,
-                    success: function(hasil) {
+                    success: async function(hasil) {
                         // hasil = JSON.parse(hasil);
                         console.log("SUCCESS : ", hasil);
-                        $.toast({
+                        await $.toast({
                             heading: 'Success',
                             text: hasil.msg,
                             showHideTransition: 'slide',
                             icon: 'success',
                             position: 'top-right'
                         });
+
+                        location.reload();
                     },
                     error: function(e) {
                         console.log("ERROR : ", e);
@@ -165,8 +167,20 @@
                     contentType: false,
                     cache: false,
                     timeout: 800000,
-                    success: function(hasil) {
+                    success: async function(hasil) {
+                        // hasil = JSON.parse(hasil);
                         console.log("SUCCESS : ", hasil);
+                        await $.toast({
+                            heading: 'Success',
+                            text: hasil.msg,
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: 'top-right'
+                        });
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 3000);
                     },
                     error: function(e) {
                         console.log("ERROR : ", e);

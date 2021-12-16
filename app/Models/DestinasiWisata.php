@@ -18,6 +18,7 @@ class DestinasiWisata extends Model
                             'harga_tiket_anak',
                             'biaya_parkir_roda_2',
                             'biaya_parkir_roda_4',
+                            'biaya_parkir_roda_6',
                             'lat',
                             'long',
                             'slug_destinasi',
@@ -34,6 +35,11 @@ class DestinasiWisata extends Model
         }
 
         return;
+    }
+
+    public function getTotalPengunjungAttribute()
+    {
+        return DestinasiWisataVisitor::selectRaw('SUM(visitor) as total')->where('destinasi_wisata_id', $this->id)->first()->total ?? 0;
     }
 
     public function getRatingAttribute()

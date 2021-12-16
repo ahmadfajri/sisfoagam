@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,6 +20,7 @@ Route::prefix('admin')->as("admin.")->group(function () {
         Route::get('/', function() {
             return redirect()->route("admin.home");
         });
+
         Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
         Route::get('data/chart', [Admin\HomeController::class, 'chart'])->name('chart');
 
@@ -39,12 +41,26 @@ Route::prefix('admin')->as("admin.")->group(function () {
                 Route::resource('kategori', Admin\MasterData\EkonomiKreatif\KategoriController::class);
             });
 
+            Route::prefix("video")->as("video.")->group(function () {
+                Route::get('/', [Api\VidioHomeController::class, 'index'])->name('index');
+                Route::post('/', [Api\VidioHomeController::class, 'change']);
+            });
 
+            Route::resource('panduan', Admin\PanduanController::class);
+
+
+            Route::prefix("banner")->as("banner.")->middleware(['banner.verif'])->group(function () {
+                Route::get('{kategori}', [Admin\MasterData\BannerController::class, 'index'])->name('index');
+                Route::post('{kategori}', [Admin\MasterData\BannerController::class, 'change'])->name('store');
+            });
         });
+
+        Route::get('panduan-aplikasi/{slug?}', [Admin\PanduanController::class, "show"])->name('panduan.show');
 
         // Foto Slider
         Route::prefix("foto-slider")->as("foto-slider.")->group(function(){
             Route::get('foto_slider',[Admin\MasterData\FotoSlider\FotoSliderController::class, 'index'])->name('index');
+            Route::post('foto_slider',[Admin\MasterData\FotoSlider\FotoSliderController::class, 'store'])->name('store');
             Route::delete('foto_slider/delete/{id}',[Admin\MasterData\FotoSlider\FotoSliderController::class, 'destroy'])->name('destroy');
             Route::post('foto_slider/edit/{id}', [Admin\MasterData\FotoSlider\FotoSliderController::class, 'edit'])->name('edit');
 
@@ -63,6 +79,14 @@ Route::prefix('admin')->as("admin.")->group(function () {
             Route::get('{id}/detail', [Admin\AkomodasiController::class, 'detail'])->name('detail');
             Route::delete('{id}/hapus',[Admin\AkomodasiController::class, 'destroy'])->name('hapus.data_review_akomodasi');
 
+            Route::prefix('{akomodasi_id}/visitor')->group(function () {
+                Route::get('/', [Admin\AkomodasiVisitorController::class, 'index']);
+                Route::post('/', [Admin\AkomodasiVisitorController::class, 'store']);
+                Route::get('form', [Admin\AkomodasiVisitorController::class, 'create']);
+                Route::get('{visitor}/form', [Admin\AkomodasiVisitorController::class, 'edit']);
+                Route::post('{visitor}/update', [Admin\AkomodasiVisitorController::class, 'update']);
+                Route::delete('{visitor}/delete', [Admin\AkomodasiVisitorController::class, 'destroy']);
+            });
         });
 
         // Route::prefix('destinasi-wisata')->as('destinasi-wisata.')->group(function (){
@@ -86,6 +110,15 @@ Route::prefix('admin')->as("admin.")->group(function () {
         });
 
         // DESTINASI WISATA
+        Route::prefix('destinasi_wisata/{destinasi_wisata}/visitor')->group(function () {
+            Route::get('/', [Admin\DestinasiWisataVisitorController::class, 'index']);
+            Route::post('/', [Admin\DestinasiWisataVisitorController::class, 'store']);
+            Route::get('form', [Admin\DestinasiWisataVisitorController::class, 'create']);
+            Route::get('{visitor}/form', [Admin\DestinasiWisataVisitorController::class, 'edit']);
+            Route::post('{visitor}/update', [Admin\DestinasiWisataVisitorController::class, 'update']);
+            Route::delete('{visitor}/delete', [Admin\DestinasiWisataVisitorController::class, 'destroy']);
+        });
+
         Route::get('destinasi-wisata/{id}/detail', [Admin\DestinasiWisataController::class, 'detail'])->name('destinasi-wisata.detail');
         Route::get('destinasi-wisata/{id}/fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas_select2'])->name('destinasi-wisata.fasilitas_select2');
         Route::get('destinasi-wisata/{id}/media', [Admin\DestinasiWisataController::class, 'media'])->name('destinasi-wisata.media');

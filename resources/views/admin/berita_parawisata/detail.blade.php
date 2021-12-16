@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Detail Berita Pariwisata')
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -29,38 +29,19 @@
                         <!-- <a href="{{ route('admin.akomodasi.home') }}" class="btn btn-secondary"> <i class="fas fa-backward"></i> Kembali</a> -->
                     </div>
                     <div class="card-body">
-                        <table id="" class="table table-borderless">
-                            <thead>
-                                @foreach($berita_parawisata as $item)
-                                <tr>
-                                    <th style="width:35%">Judul</th>
-                                    <th>{{ $item->judul }}</th>
-                                </tr>
-                                <tr>
-                                    <th style="width:35%">Sort Narasi</th>
-                                    <th>{{ substr(strip_tags($item->narasi), 0, 100) }}{{ strlen($item->narasi) > 100? "..." : "" }}</th>
-                                </tr>
-                                <tr>
-                                    <th style="width:35%">Posting By</th>
-                                    <th>{{ $item->posting_by }}</th>
-                                </tr>
-                                <tr>
-                                    <th style="width:35%">Posted At</th>
-                                    <th>{{ $item->created_at}}</th>
-                                </tr>
-                                <tr>
-                                    <th style="width:35%; vertical-align:middle;">Thumbnail</th>
-                                    <th>
-                                    <img src="{{ $item->foto }}" alt="{{ $item->judul }}" class="img-fluid" width="100px">
-                                    </th>
-                                </tr>
+                        <h5 class="text-center">
+                            {{ $berita_parawisata->judul }}
+                        </h5>
 
-                                @endforeach
-                            </thead>
-                            <tbody>
+                        <span><b>Posted By :</b> {{ $berita_parawisata->posting_by }}</span>
+                        <span class="float-right"><b>Posted At :</b> {{ date("d M Y H:i:s", strtotime($berita_parawisata->created_at)) }}</span>
 
-                            </tbody>
-                        </table>
+                        <div class="text-center">
+                            <h6><b>Thumbnail</b> </h6>
+                            <img src="{{ $berita_parawisata->foto }}" alt="{{ $berita_parawisata->judul }}" class="img-fluid" width="300px">
+                        </div>
+
+                        {!!  $berita_parawisata->narasi !!}
 
                     </div>
                 </div>

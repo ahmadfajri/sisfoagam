@@ -122,7 +122,7 @@ class KategoriController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/kategori_wisata", $file_name);
 
-            list($baseUrl, $path, $dir, $file) = explode("/", $kategori->icon_kategori_wisata);
+            list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $kategori->icon_kategori_wisata);
             Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
             $update['icon_kategori_wisata'] = storage_url(substr($file_location, 7));

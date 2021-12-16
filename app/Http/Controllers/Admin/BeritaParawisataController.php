@@ -68,7 +68,7 @@ class BeritaParawisataController extends Controller
         ]);
 
 
-        return back()->with("success", "Berita Parawisata berhasil ditambahkan");
+        return redirect()->route('admin.berita-parawisata.index')->with("success", "Berita Parawisata berhasil ditambahkan");
     }
 
     /**
@@ -128,7 +128,7 @@ class BeritaParawisataController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/berita_parawisata", $file_name);
 
-            list($baseUrl, $path, $dir, $file) = explode("/", $berita_parawisatum->foto);
+            list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $berita_parawisatum->foto);
             Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
             $update['foto'] = storage_url(substr($file_location, 7));
@@ -137,7 +137,7 @@ class BeritaParawisataController extends Controller
         $berita_parawisatum->update($update);
 
 
-        return back()->with("success", "Berita Parawisata berhasil ditambahkan");
+        return redirect()->route('admin.berita-parawisata.index')->with("success", "Berita Parawisata berhasil ditambahkan");
     }
 
     /**
@@ -156,7 +156,7 @@ class BeritaParawisataController extends Controller
     public function detail($id)
     {
 
-        $data['berita_parawisata'] = DB::table('berita_parawisata')->get();
+        $data['berita_parawisata'] = DB::table('berita_parawisata')->where('id', $id)->first();
 
         return view('admin.berita_parawisata.detail',$data);
 

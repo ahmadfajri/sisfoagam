@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Event Parawisata')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -29,37 +29,38 @@
                             <a href="{{ route('admin.event-parawisata.create') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
-                            <table id="table1" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:2%">No</th>
-                                        <th style="width:10%">Jenis Event</th>
-                                        <th style="width:10%">Jadwal Pelaksanaan</th>
-                                        <th style="width:10%">Keterangan</th>
-                                        <th style="width:10%">Foto</th>
-                                        <!-- <th style="width:18%">Keterangan</th> -->
-                                        <th style="width:10%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($events as $i => $d)
-                                    <tr>
-                                        <td>{{$i+1}}</td>
-                                        <td>{{$d->jenis_event}}</td>
-                                        <td>{{ date("d M Y", strtotime($d->start_at)) }} - {{ date("d M Y", strtotime($d->end_at)) }}</td>
-                                        <td>{{ substr(strip_tags($d->keterangan), 0, 100) }}{{ strlen($d->keterangan) > 100? "..." : "" }}</td>
-                                        <td>
-                                            <img src="{{ $d->foto }}" alt="{{ $d->jenis_event }}" class="img-fluid" width="100px">
-                                        </td>
-                                        <td>
-                                            <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                                            <a href="{{ route('admin.event-parawisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-                                            <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="table1" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:2%">No</th>
+                                            <th style="width:10%">Jenis Event</th>
+                                            <th style="width:10%">Jadwal Pelaksanaan</th>
+                                            <th style="width:10%">Keterangan</th>
+                                            <th style="width:10%">Foto</th>
+                                            <!-- <th style="width:18%">Keterangan</th> -->
+                                            <th style="width:10%">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($events as $i => $d)
+                                        <tr>
+                                            <td>{{$i+1}}</td>
+                                            <td>{{$d->jenis_event}}</td>
+                                            <td>{{ date("d M Y", strtotime($d->start_at)) }} - {{ date("d M Y", strtotime($d->end_at)) }}</td>
+                                            <td>{{ substr(strip_tags($d->keterangan), 0, 100) }}{{ strlen($d->keterangan) > 100? "..." : "" }}</td>
+                                            <td>
+                                                <img src="{{ $d->foto }}" alt="{{ $d->jenis_event }}" class="img-fluid" width="100px">
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('admin.event-parawisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                                                <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
 
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use PDF;
 use App\Models\Akomodasi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\DestinasiWisataFotoVidioWisata;
 use App\Models\DestinasiWisataJumlahKunjungan;
+use App\Models\DestinasiWisataVisitor;
 
 class DestinasiWisataController extends Controller
 {
@@ -65,6 +67,7 @@ class DestinasiWisataController extends Controller
             'destinasi_wisata' => 'required|string|unique:destinasi_wisata,nama_wisata',
             'harga_tiket_dewasa' => 'required|string',
             'harga_tiket_anak' => 'required|string',
+            'biaya_parkir_r6' => 'required|string',
             'biaya_parkir_r4' => 'required|string',
             'biaya_parkir_r2' => 'required|string',
             'lat' => 'required|string',
@@ -80,6 +83,7 @@ class DestinasiWisataController extends Controller
         $harga_tiket_anak  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_tiket_anak)[0]);
         $biaya_parkir_r2  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r2)[0]);
         $biaya_parkir_r4  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r4)[0]);
+        $biaya_parkir_r6  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r6)[0]);
 
 
         if ($request->has("thumbnail")) {
@@ -95,6 +99,7 @@ class DestinasiWisataController extends Controller
             'harga_tiket_anak' => $harga_tiket_anak,
             'biaya_parkir_roda_2' => $biaya_parkir_r2,
             'biaya_parkir_roda_4' => $biaya_parkir_r4,
+            'biaya_parkir_roda_6' => $biaya_parkir_r6,
             'lat' => $request->lat,
             'long' => $request->lng,
             'slug_destinasi' => rand(10000, 99999) . '-' . Str::slug($request->destinasi_wisata),
@@ -150,7 +155,7 @@ class DestinasiWisataController extends Controller
             DB::table('destinasi_wisata_foto_vidio_wisata')->insert($videos);
         }
 
-        return back()->with("success", "Destinasi berhasil ditambahkan");
+        return redirect()->route('admin.destinasi-wisata.index')->with("success", "Destinasi berhasil ditambahkan");
     }
 
     /**
@@ -192,11 +197,13 @@ class DestinasiWisataController extends Controller
     public function update(Request $request, DestinasiWisata $destinasi_wisatum)
     {
         //
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|exists:kategori_wisata,id',
             'destinasi_wisata' => 'required|string|unique:destinasi_wisata,nama_wisata,' . $destinasi_wisatum->id,
             'harga_tiket_dewasa' => 'required|string',
             'harga_tiket_anak' => 'required|string',
+            'biaya_parkir_r6' => 'required|string',
             'biaya_parkir_r4' => 'required|string',
             'biaya_parkir_r2' => 'required|string',
             'lat' => 'required|string',
@@ -212,6 +219,7 @@ class DestinasiWisataController extends Controller
         $harga_tiket_anak  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_tiket_anak)[0]);
         $biaya_parkir_r2  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r2)[0]);
         $biaya_parkir_r4  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r4)[0]);
+        $biaya_parkir_r6  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r6)[0]);
 
         $update = [
             'kategori_wisata_id' => $request->kategori,
@@ -220,6 +228,7 @@ class DestinasiWisataController extends Controller
             'harga_tiket_anak' => $harga_tiket_anak,
             'biaya_parkir_roda_2' => $biaya_parkir_r2,
             'biaya_parkir_roda_4' => $biaya_parkir_r4,
+            'biaya_parkir_roda_6' => $biaya_parkir_r6,
             'lat' => $request->lat,
             'long' => $request->lng,
             'slug_destinasi' => rand(10000, 99999) . '-' . Str::slug($request->destinasi_wisata),
@@ -231,7 +240,7 @@ class DestinasiWisataController extends Controller
             $file_name = rand(100, 333) . "-" . time() . "." . $file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/destinasi_wisata", $file_name);
 
-            list($baseUrl, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
+            list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
             Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
             $update['thumbnail_destinasi_wisata'] =  storage_url(substr($file_location, 7));
@@ -253,7 +262,7 @@ class DestinasiWisataController extends Controller
         if ($request->filled('old')) {
             $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where('kategori', 'foto')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
-                list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
+                list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $value->file);
                 Storage::disk('public')->delete(implode('/', [$dir, $file]));
                 $rmv_from_galery[] = $value->file;
             }
@@ -287,13 +296,20 @@ class DestinasiWisataController extends Controller
         }
 
         if ($request->filled("gallery_video")) {
-            $not_inc = DB::table('foto_video_akomodasi')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
+            // $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
 
-            foreach ($not_inc as $key => $value) {
-                $rmv_from_galery[] = $value->file;
+            // foreach ($not_inc as $key => $value) {
+            //     $rmv_from_galery[] = $value->file;
+            // }
+
+            $video_now = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
+            foreach ($video_now as $key => $value) {
+                if(!in_array($value->file, $request->gallery_video)) {
+                    $rmv_from_galery[] = $value->file;
+                }
             }
 
-            DB::table('foto_video_akomodasi')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->delete();
+            DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->delete();
             $videos = [];
 
             foreach ($request->gallery_video as $key => $value) {
@@ -307,13 +323,16 @@ class DestinasiWisataController extends Controller
                     'file' => $value,
                 ];
             }
+            DB::table('destinasi_wisata_foto_vidio_wisata')->insert($videos);
         }
+
+        // return $rmv_from_galery;
 
         GaleriParawisata::insert($ins_to_galery);
 
         GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
-        return back()->with("success", "Destinasi berhasil ditambahkan");
+        return redirect()->route('admin.destinasi-wisata.index')->with("success", "Destinasi berhasil ditambahkan");
     }
 
     /**
@@ -326,7 +345,7 @@ class DestinasiWisataController extends Controller
     {
         //
 
-        list($baseUrl, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
+        list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
         Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
         $rmv_from_galery = [];
@@ -405,5 +424,18 @@ class DestinasiWisataController extends Controller
         ]);
 
         return ['pesan' => 'berhasil'];
+    }
+    public function report(Request $request)
+    {
+        $tahun = $request->tahun ?? date('Y');
+
+        $visitors = DestinasiWisataVisitor::where('periode', 'like', $tahun.'%')->whereRaw("(SELECT COUNT(id) FROM destinasi_wisata WHERE id=destinasi_wisata_visitors.destinasi_wisata_id) > 0")->orderBy('periode', 'asc')->get()->groupBy('periode');
+        // return $visitors;
+
+        view()->share('visitors', $visitors);
+        $pdf_doc = PDF::loadView('admin.destinasi_wisata.report', $visitors);
+
+        return $pdf_doc->download('Report_Destinasi_Wisata_Th_'.$tahun.'.pdf');
+        // view('admin.destinasi_wisata.report', compact('visitors'));
     }
 }

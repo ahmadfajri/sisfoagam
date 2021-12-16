@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'destinasi_wisata')
+@section('title', 'Tambah Destinasi Wisata')
 @push('css')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
@@ -71,14 +71,21 @@
                                                         placeholder="Kelas">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Biaya Parkir R. 6</label>
+                                                    <input type="text" name="biaya_parkir_r6" id="biaya_parkir_r6" class="form-control"
+                                                        placeholder="Kelas">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="">Biaya Parkir R. 4</label>
                                                     <input type="text" name="biaya_parkir_r4" id="biaya_parkir_r4" class="form-control"
                                                         placeholder="Kelas">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="">Biaya Parkir R. 2</label>
                                                     <input type="text" name="biaya_parkir_r2" id="biaya_parkir_r2" class="form-control"
@@ -90,8 +97,6 @@
                                                     <label for="">Thumbnail</label>
                                                     <input type="file" name="thumbnail" id="thumbnail"
                                                         onchange="return tampilfoto()" class="form-control">
-                                                    <input type="hidden" name="lat" id="lat" class="form-control">
-                                                    <input type="hidden" name="lng" id="lng" class="form-control">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="">Fasilitas</label>
@@ -114,6 +119,16 @@
                                         <div class="form-group">
                                             <label for="">Lokasi</label>
                                             <div style="height: 337px;" id="map"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="">Latitude</label>
+                                                <input type="text" id="lat" name="lat" class="form-control" onkeyup="showLocation()">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="">Longtitude</label>
+                                                <input type="text" id="lng" name="lng" class="form-control" onkeyup="showLocation()">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -400,6 +415,11 @@
             decimalCharacter: ',',
             digitGroupSeparator: '.',
         });
+        var biaya_parkir_r6 = new AutoNumeric('#biaya_parkir_r6', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
         var biaya_parkir_r4 = new AutoNumeric('#biaya_parkir_r4', {
             currencySymbol: 'Rp.',
             decimalCharacter: ',',
@@ -443,7 +463,7 @@
                 contentType: false,
                 dataType: 'JSON',
                 success: function(data) {
-                    // location.reload();
+                    location.reload();
                     alert("Fasilitas berhasil ditambahkan")
                     $('#tambah-fasilitas').modal('hide')
                     console.log(data);
@@ -498,17 +518,11 @@
         }
 
         function showLocation() {
-
-            // pas lokasi basobok, jalankan kode yg ado didalam function ko
-            var geolocation = navigator.geolocation.getCurrentPosition(function(pos) {
-                // kode dibawah ko dijalankan pas posisi gps basobok
-                var lat = pos.coords.latitude; // ambiak lat gps
-                var lng = pos.coords.longitude; // ambiak lng gps
+                lat = $('#lat').val()
+                lng = $('#lng').val();
                 map.addControl(controlSearch);
                 map.setView([lat, lng]); // ubah tampilan posisi peta ke posisi gps
                 marker.setLatLng([lat, lng]); // pindahkan posisi marker ke posisi gps
-            });
-
         }
 
         map.on('click', klik);

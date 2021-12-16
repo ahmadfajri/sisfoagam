@@ -1,17 +1,17 @@
 @extends('admin.layouts.app')
-@section('title', 'Home')
+@section('title', 'Kategori Wisata')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">kategori</h1>
+                    <h1 class="m-0">Kategori Wisata</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">kategori</li>
+                        <li class="breadcrumb-item active">Kategori Wisata</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -157,6 +157,7 @@
                     timeout: 800000,
                     success: function (hasil) {
                         console.log("SUCCESS : ", hasil);
+                        location.reload();
                     },
                     error: function (e) {
                         console.log("ERROR : ", e);

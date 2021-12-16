@@ -71,7 +71,7 @@ class EventParawisataController extends Controller
             'slug_event_parawisata' => rand(10000,99999).'-'.Str::slug($request->jenis_event)
         ]);
 
-        return back()->with("success", "Event Parawisata berhasil ditambahkan");
+        return redirect()->route('admin.event-parawisata.index')->with("success", "Event Parawisata berhasil ditambahkan");
     }
 
     /**
@@ -133,7 +133,7 @@ class EventParawisataController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/event_parawisata", $file_name);
 
-            list($baseUrl, $path, $dir, $file) = explode("/", $event_parawisatum->foto);
+            list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $event_parawisatum->foto);
             Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
             $update['foto'] = storage_url(substr($file_location, 7));
@@ -141,7 +141,7 @@ class EventParawisataController extends Controller
 
         $event_parawisatum->update($update);
 
-        return back()->with("success", "Event Parawisata berhasil diperbaharui");
+        return redirect()->route('admin.event-parawisata.index')->with("success", "Event Parawisata berhasil diperbaharui");
     }
 
     /**

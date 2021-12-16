@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Destinasi Wisata')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -29,49 +29,50 @@
                             <a href="{{ route('admin.destinasi-wisata.create') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
-                            <table id="table1" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:2%">No</th>
-                                        <th style="width:10%">Thumbnail</th>
-                                        <th style="width:10%">Kategori</th>
-                                        <th style="width:10%">Akomodasi</th>
-                                        <th style="width:10%">HTM Dewasa</th>
-                                        <th style="width:10%">HTM Anak</th>
-                                        <th style="width:10%">Biaya Parkir Roda 2</th>
-                                        <th style="width:10%">Biaya Parkir Roda 4</th>
-                                        <th style="width:10%">Jumlah Kunjungan</th>
-                                        <th style="width:10%">Lokasi</th>
-                                        <!-- <th style="width:18%">Keterangan</th> -->
-                                        <th style="width:10%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($destinasi_wisata as $i => $d)
-                                    <tr>
-                                        <td>{{$i+1}}</td>
-                                        <td><img src="{{ $d->thumbnail_destinasi_wisata }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
-                                        <td>{{$d->kategori->nama_kategori_wisata}}</td>
-                                        <td>{{$d->nama_wisata}}</td>
-                                        <td>{{number_format($d->harga_tiket_dewasa)}}</td>
-                                        <td>{{number_format($d->harga_tiket_anak)}}</td>
-                                        <td>{{number_format($d->biaya_parkir_roda_2)}}</td>
-                                        <td>{{number_format($d->biaya_parkir_roda_4)}}</td>
-                                        <td>{{number_format($d->jumlah_pengunjung->jumlah_kunjungan ?? 0)}}</td>
-                                        <td>
-                                            <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
-                                        </td>
-                                        <td>
-                                            <button type="button" onclick="ubahJumlahKunjungan('{{ route('admin.destinasi-wisata.ubahJumlahKunjungan', $d->id) }}', '{{ $d->nama_wisata }}', {{ $d->jumlah_pengunjung->jumlah_kunjungan ?? 0 }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                                            <a href="{{ route('admin.destinasi-wisata.detail', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('admin.destinasi-wisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-                                            <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
+                            <div class="table-responsive">
+                                <table id="table1" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:2%">No</th>
+                                            <th style="width:10%">Thumbnail</th>
+                                            <th style="width:10%">Kategori</th>
+                                            <th style="width:10%">Nama Wisata</th>
+                                            <th style="width:10%">HTM Dewasa</th>
+                                            <th style="width:10%">HTM Anak</th>
+                                            <th style="width:10%">Biaya Parkir Roda 2</th>
+                                            <th style="width:10%">Biaya Parkir Roda 4</th>
+                                            <th style="width:10%">Jumlah Kunjungan</th>
+                                            <th style="width:10%">Lokasi</th>
+                                            <!-- <th style="width:18%">Keterangan</th> -->
+                                            <th style="width:10%">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($destinasi_wisata as $i => $d)
+                                        <tr>
+                                            <td>{{$i+1}}</td>
+                                            <td><img src="{{ $d->thumbnail_destinasi_wisata }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
+                                            <td>{{$d->kategori->nama_kategori_wisata}}</td>
+                                            <td>{{$d->nama_wisata}}</td>
+                                            <td>{{number_format($d->harga_tiket_dewasa)}}</td>
+                                            <td>{{number_format($d->harga_tiket_anak)}}</td>
+                                            <td>{{number_format($d->biaya_parkir_roda_2)}}</td>
+                                            <td>{{number_format($d->biaya_parkir_roda_4)}}</td>
+                                            <td>{{number_format($d->total_pengunjung ?? 0)}}</td>
+                                            <td>
+                                                <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
+                                            </td>
+                                            <td>
+                                                <button onclick="visitorModal({{ $d->id }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-glasses"></i></button>
+                                                <a href="{{ route('admin.destinasi-wisata.detail', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                                <a href="{{ route('admin.destinasi-wisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                                                <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -80,6 +81,50 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
+
+
+    <!-- Modal Dertail -->
+    <div class="modal fade" id="visitorsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <div id="title"></div>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Dertail -->
+    <div class="modal fade" id="visitorsEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <div id="title"></div>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <script>
+                    function reload_table_kunjungan(id) {
+                        $('#visitorsModal .modal-body').load("{{ url('/') }}/admin/destinasi_wisata/"+id+"/visitor");
+                    }
+                </script>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal tambah fasilitas -->
     <div class="modal fade" id="tambahfasilitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -104,74 +149,18 @@
 
 @push('js')
     <script>
-        var harga = new AutoNumeric('#harga', {
-            currencySymbol : 'Rp.',
-            decimalCharacter : ',',
-            digitGroupSeparator : '.',
-        });
+        function visitorModal(id) {
+            $('#visitorsModal #title').text("Daftar Pengunjung");
+            reload_table_kunjungan(id);
+            $('#visitorsModal').modal('show');
+        }
 
         function tampil()
         {
             $('#tampilFoto').html(`<img src="../img/noimages.png" width="60%"/>`)
             $('#addDestinasiWisata').modal('show')
-            $('#title').html('Tambah Akomodasi')
+            $('#title').html('Tambah destinasi_wisata')
         }
-
-        var map = L.map('map').setView([0,0], 13);
-        var marker = L.marker([0,0]).addTo(map);
-        var popup = L.popup();
-        var markersLayer = new L.LayerGroup();
-        map.addLayer(markersLayer);
-
-        var controlSearch = new L.Control.Search({
-            position:'topright',
-            layer: markersLayer,
-            initial: false,
-            zoom: 18,
-            marker: false
-        });
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 18,
-            id: 'mapbox/streets-v11',
-            // tileSize: 512,
-            // zoomOffset: -1,
-            accessToken: 'pk.eyJ1IjoiZ2VtYWZhamFyMDkiLCJhIjoiY2t2cTZuNWN6MGVkNzJwcXBzdnlta2Q1aSJ9.6KTCVYzFPCs6Qwn6WyVazw'
-        }).addTo(map);
-
-        function klik(e) {
-        // alert("kordiant" + e.latlng.lat);
-            popup
-            .setLatLng(e.latlng)
-            .setContent(e.latlng.toString())
-            .openOn(map);
-            if (marker) {
-                map.removeLayer(marker);
-            }
-            $('#lat').val(e.latlng.lat)
-            $('#lng').val(e.latlng.lng)
-            // marker.setLatLng(e.latlng);
-            marker = new L.Marker(e.latlng).addTo(map);
-        }
-
-        function showLocation() {
-
-                // pas lokasi basobok, jalankan kode yg ado didalam function ko
-            var geolocation = navigator.geolocation.getCurrentPosition(function(pos){
-                // kode dibawah ko dijalankan pas posisi gps basobok
-                    var lat = pos.coords.latitude; // ambiak lat gps
-                    var lng = pos.coords.longitude; // ambiak lng gps
-                    map.addControl( controlSearch );
-                    map.setView([lat,lng]); // ubah tampilan posisi peta ke posisi gps
-                    marker.setLatLng([lat,lng]); // pindahkan posisi marker ke posisi gps
-            });
-
-        }
-
-        map.on('click', klik);
-
-        showLocation()
 
         function tampilfoto()
         {

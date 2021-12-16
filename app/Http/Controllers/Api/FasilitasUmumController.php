@@ -15,11 +15,62 @@ class FasilitasUmumController extends Controller
     //
     public function getFasilitasUmum()
     {
+        if(request()->has("lat") || request()->has("long")) {
+            try {
+                $data = FasilitasUmum::with(["fotovideo"])->select("fasilitas_umum.*")
+                ->orderByRaw("(
+                    6371 * acos (
+                    cos ( radians(".request()->lat.") )
+                    * cos( radians( fasilitas_umum.lat ) )
+                    * cos( radians( fasilitas_umum.long ) - radians(".request()->long.") )
+                    + sin ( radians(".request()->lat.") )
+                    * sin( radians( fasilitas_umum.lat ) )
+                    )
+                )")->paginate(8);
+                if ($data->count() > 0) {
+                    $data->makeHidden('fasilitas_umum_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
+                return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+            }
+        } else {
+            try {
+                $data = FasilitasUmum::with(["fotovideo"])
+                ->select("fasilitas_umum.*")->paginate(8);
+                if ($data->count() > 0) {
+                    $data->makeHidden('fasilitas_umum_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
+                return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+            }
+        }
+    }
+
+    public function getFasilitasUmumSortByJarak(Request $request)
+    {
+        if(!$request->has("lat") || !$request->has("long")) {
+            return response()->json(ApiResponse::NotFound("Parameter required"));
+        }
+
         try {
-            $data = FasilitasUmum::with(["fotovideo"])
-            ->select("fasilitas_umum.*")->paginate(8);
+            $data = FasilitasUmum::with(["fotovideo"])->select("fasilitas_umum.*")
+            ->orderByRaw("(
+                6371 * acos (
+                  cos ( radians(".$request->lat.") )
+                  * cos( radians( fasilitas_umum.lat ) )
+                  * cos( radians( fasilitas_umum.long ) - radians(".$request->long.") )
+                  + sin ( radians(".$request->lat.") )
+                  * sin( radians( fasilitas_umum.lat ) )
+                )
+              )")->limit(5)->get();
+
             if ($data->count() > 0) {
-                $data->makeHidden('fasilitas_umum_id');
                 return response()->json(ApiResponse::Ok($data, 200, "Ok"));
             } else {
                 return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));

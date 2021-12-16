@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Home')
+@section('title', 'Foto Slider')
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -26,6 +26,7 @@
             <div class="col-lg-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
+                        <button type="button" data-toggle="modal" data-target="#add-slider" class="btn btn-primary"> Add Slider</button>
                     </div>
                     <div class="card-body">
                         <table class="table" id="table1" class="table table-bordered table-striped">
@@ -45,6 +46,7 @@
                                     <td>{{ $item->description }}</td>
                                     <td>
                                         <button style="width:80px;color:white" type="button" class="btn btn-warning p-1" onclick="edits({{ $item->id }}, '{{ $item->file }}', '{{ route('admin.foto-slider.edit', $item->id) }}', '{{  $item->description }}')">Edit</button>
+                                        <button style="width:80px;color:white" type="button" class="btn btn-danger p-1" onclick="ModalHapus('{{ route('admin.foto-slider.destroy', $item->id) }}')">Delete</button>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -59,6 +61,26 @@
 </div>
 <!-- /.content -->
 
+<div class="modal fade" id="add-slider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @include('admin.master_data.foto_slider.form')
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="edit-slider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -69,7 +91,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                @include('admin.master_data.foto_slider.form')
+                <form action="{{ route('admin.foto-slider.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @include('admin.master_data.foto_slider.form')
+                </form>
             </div>
         </div>
     </div>

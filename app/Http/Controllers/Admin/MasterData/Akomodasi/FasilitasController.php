@@ -114,7 +114,7 @@ class FasilitasController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/fasilitas_akomodasi", $file_name);
 
-            list($baseUrl, $path, $dir, $file) = explode("/", $fasilita->icon_fasilitas_akomodasi);
+            list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $fasilita->icon_fasilitas_akomodasi);
             Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
             $update['icon_fasilitas_akomodasi'] = storage_url(substr($file_location, 7));

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Berita Parawisata')
+@section('title', 'Tambah Berita Parawisata')
 @push('css')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">

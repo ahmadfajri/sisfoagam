@@ -73,7 +73,7 @@ class GaleriParawisataController extends Controller
             GaleriParawisata::insert($photos);
         }
 
-        return back()->with("success", "Media berhasil diupload");
+        return redirect()->route('admin.galeri-parawisata.index')->with("success", "Media berhasil diupload");
     }
 
     /**

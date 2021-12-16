@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Galeri Parawisata')
 @push('css')
     <link rel="stylesheet" href="{{ url('/') }}/admin/assets/plugins/lightbox2/css/lightbox.css">
 @endpush
@@ -32,29 +32,32 @@
                             <a href="{{ route('admin.galeri-parawisata.create') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:2%">No</th>
-                                        <th>Foto</th>
-                                        <th style="width:20%">Kategori</th>
-                                        <th style="width:10%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($galeries as $i => $d)
-                                    <tr>
-                                        <td>{{$i+1}}</td>
-                                        <td><a href="{{ $d->file }}" data-lightbox="galeri_parawisata" data-title="#{{ $d->id }} ({{ $d->kategori }})"><img src="{{ $d->file }}" alt="{{ $d->kategori }}" class="img-fluid" width="100px"></a></td>
-                                        <td>{{$d->kategori}}</td>
-                                        <td>
-                                            <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                                            <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:2%">No</th>
+                                            <th>Foto</th>
+                                            <th style="width:20%">Kategori</th>
+                                            <th style="width:10%">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($galeries as $i => $d)
+                                        <tr>
+                                            <td>{{$i+1}}</td>
+                                            <td><a href="{{ $d->file }}" data-lightbox="galeri_parawisata" data-title="#{{ $d->id }} ({{ $d->kategori }})"><img src="{{ $d->file }}" alt="{{ $d->kategori }}" class="img-fluid" width="100px"></a></td>
+                                            <td>{{$d->kategori}}</td>
+                                            <td>
+                                                <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
+                                                <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
 
                             {{ $galeries->links() }}
                         </div>

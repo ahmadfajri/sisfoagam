@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Tambah Akomodasi')
 @push('css')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
@@ -69,8 +69,6 @@
                                             <label for="">Thumbnail</label>
                                             <input type="file" name="thumbnail" id="thumbnail"
                                                 onchange="return tampilfoto()" class="form-control">
-                                            <input type="hidden" name="lat" id="lat" class="form-control">
-                                            <input type="hidden" name="lng" id="lng" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
@@ -92,6 +90,16 @@
                                         <div class="form-group">
                                             <label for="">Lokasi</label>
                                             <div style="height: 337px;" id="map"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="">Latitude</label>
+                                                <input type="text" id="lat" name="lat" class="form-control" onkeyup="showLocation()">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="">Longtitude</label>
+                                                <input type="text" id="lng" name="lng" class="form-control" onkeyup="showLocation()">
+                                            </div>
                                         </div>
                                     </div>
 
@@ -544,22 +552,16 @@
         }
 
         function showLocation() {
-
-            // pas lokasi basobok, jalankan kode yg ado didalam function ko
-            var geolocation = navigator.geolocation.getCurrentPosition(function(pos) {
-                // kode dibawah ko dijalankan pas posisi gps basobok
-                var lat = pos.coords.latitude; // ambiak lat gps
-                var lng = pos.coords.longitude; // ambiak lng gps
+                lat = $('#lat').val()
+                lng = $('#lng').val();
                 map.addControl(controlSearch);
                 map.setView([lat, lng]); // ubah tampilan posisi peta ke posisi gps
                 marker.setLatLng([lat, lng]); // pindahkan posisi marker ke posisi gps
-            });
-
         }
+        showLocation()
 
         map.on('click', klik);
 
-        showLocation()
 
         function tampilfoto() {
             var fileInput = document.getElementById('thumbnail');

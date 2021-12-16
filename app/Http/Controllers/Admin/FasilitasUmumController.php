@@ -72,7 +72,7 @@ class FasilitasUmumController extends Controller
             'thumbnail' => storage_url(substr($file_location, 7))
         ]);
 
-        return back()->with("success", "Fasilitas Umum berhasil ditambahkan");
+        return redirect()->route('admin.fasilitas-umum.index')->with("success", "Fasilitas Umum berhasil ditambahkan");
     }
 
     /**
@@ -136,7 +136,7 @@ class FasilitasUmumController extends Controller
             $file_location = $file_upload->storeAs("public/fasilitas_umum", $file_name);
 
             if(strlen($fasilitas_umum->thumbnail)) {
-                list($baseUrl, $path, $dir, $file) = explode("/", $fasilitas_umum->thumbnail);
+                list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $fasilitas_umum->thumbnail);
                 Storage::disk('public')->delete(implode('/', [$dir, $file]));
             }
             $update['thumbnail'] = storage_url(substr($file_location, 7));
@@ -144,7 +144,7 @@ class FasilitasUmumController extends Controller
 
         $fasilitas_umum->update($update);
 
-        return back()->with("success", "Fasilitas Umum berhasil diperbaharui");
+        return redirect()->route('admin.fasilitas-umum.index')->with("success", "Fasilitas Umum berhasil diperbaharui");
     }
 
     /**
